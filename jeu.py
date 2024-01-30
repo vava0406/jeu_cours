@@ -15,8 +15,8 @@ import pygame, sys, time, random
 difficulty = 25
 
 # Window size
-FRAME_SIZE_Y = 720
-FRAME_SIZE_X = 480
+FRAME_SIZE_X = 720
+FRAME_SIZE_Y = 480
 
 # Checks for errors encountered
 check_errors = pygame.init()
