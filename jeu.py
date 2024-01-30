@@ -66,6 +66,7 @@ score = 0
 
 # Game Over
 font_height = 90
+
 def game_over():
     my_font = pygame.font.SysFont('times new roman', font_height)
     game_over_surface = my_font.render('YOU DIED', True, RED)
