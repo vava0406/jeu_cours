@@ -60,9 +60,12 @@ snake_body: List[List[int]] = [
     [POSITION_X - HEIGHT_WIDTH, POSITION_Y],
     [POSITION_X - (2 * HEIGHT_WIDTH), POSITION_Y],
 ]
-food_pos = [random.randrange(1, (FRAME_SIZE_X//HEIGHT_WIDTH)) * HEIGHT_WIDTH, 
-            random.randrange(1, (FRAME_SIZE_Y//HEIGHT_WIDTH)) * HEIGHT_WIDTH]
-food_spawn = True
+
+food_pos: List[int] = [
+    random.randrange(1, (FRAME_SIZE_X // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+    random.randrange(1, (FRAME_SIZE_Y // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+]
+food_spawn: bool = True
 
 direction = 'RIGHT'
 change_to = direction
