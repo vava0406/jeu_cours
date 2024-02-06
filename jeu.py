@@ -67,20 +67,20 @@ food_pos: List[int] = [
 ]
 food_spawn: bool = True
 
-direction = 'RIGHT'
-change_to = direction
+direction: str = 'RIGHT'
+change_to: str = direction
 
-score = 0
+score: int = 0
 
 
 # Game Over
-font_height = 90
+font_height: int = 90
 
-def game_over():
-    my_font = pygame.font.SysFont('times new roman', font_height)
-    game_over_surface = my_font.render('YOU DIED', True, RED)
-    game_over_rect = game_over_surface.get_rect()
-    game_over_rect.midtop = (FRAME_SIZE_X/2, FRAME_SIZE_Y/4)
+def game_over() -> None:
+    my_font: pygame.font.Font = pygame.font.SysFont('times new roman', font_height)
+    game_over_surface: pygame.Surface = my_font.render('YOU DIED', True, RED)
+    game_over_rect: pygame.Rect = game_over_surface.get_rect()
+    game_over_rect.midtop = (FRAME_SIZE_X / 2, FRAME_SIZE_Y / 4)
     game_window.fill(BLACK)
     game_window.blit(game_over_surface, game_over_rect)
     show_score(0, RED, 'times', 20)
