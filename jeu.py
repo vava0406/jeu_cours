@@ -103,8 +103,23 @@ def show_score(choice, color, font, size):
     # pygame.display.flip()
 
 
+class Game:
+    def __init__(self) -> None:
+        pass
+
+    def is_ended(self) -> bool:
+        return False
+
+    def update(self, clock : pygame.time.Clock) -> None:
+        pass
+
+    def render(self, surface : pygame.Surface) -> None:
+        pass
+
 # Main logic
-while True:
+game = Game()
+while not game.is_ended():
+    game.update(pygame.time.Clock())
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -160,22 +175,6 @@ while True:
         ]
     food_spawn = True
 
-    # GFX
-    game_window.fill(BLACK)
-    for pos in snake_body:
-        # Snake body
-        # .draw.rect(play_surface, color, xy-coordinate)
-        # xy-coordinate -> .Rect(x, y, size_x, size_y)
-        pygame.draw.rect(
-            game_window, GREEN, pygame.Rect(pos[0], pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
-        )
-
-    # Snake food
-    pygame.draw.rect(
-        game_window, WHITE, pygame.Rect(food_pos[0], food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
-    )
-
-
     # Game Over conditions
     # Getting out of bounds
     if snake_pos[0] < 0 or snake_pos[0] > FRAME_SIZE_X - HEIGHT_WIDTH:
@@ -193,15 +192,18 @@ while True:
     # Refresh rate
     fps_controller.tick(difficulty)
 
-class Game:
-    def __init__(self) -> None:
-        pass
+    game.render(game_window)
+    # GFX
+    game_window.fill(BLACK)
+    for pos in snake_body:
+        # Snake body
+        # .draw.rect(play_surface, color, xy-coordinate)
+        # xy-coordinate -> .Rect(x, y, size_x, size_y)
+        pygame.draw.rect(
+            game_window, GREEN, pygame.Rect(pos[0], pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+        )
 
-    def is_ended(self: Game) -> bool:
-        return False
-
-    def update(self: Game, clock : Clock) -> None:
-        pass
-
-    def render(self: Game, surface : Surface) -> None:
-        pass
+    # Snake food
+    pygame.draw.rect(
+        game_window, WHITE, pygame.Rect(food_pos[0], food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+    )
