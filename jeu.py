@@ -166,10 +166,9 @@ while True:
         # Snake body
         # .draw.rect(play_surface, color, xy-coordinate)
         # xy-coordinate -> .Rect(x, y, size_x, size_y)
-        pygame.draw.rect(game_window, 
-                        GREEN, 
-                        pygame.Rect(pos[0], 
-                        pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH))
+        pygame.draw.rect(
+            game_window, GREEN, pygame.Rect(pos[0], pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+        )
 
     # Snake food
     pygame.draw.rect(game_window, WHITE, 
