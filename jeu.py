@@ -67,8 +67,6 @@ food_pos: List[int] = [
 ]
 food_spawn: bool = True
 
-direction: str = 'RIGHT'
-change_to: str = direction
 
 score: int = 0
 
@@ -105,18 +103,108 @@ def show_score(choice, color, font, size):
 
 class Game:
     def __init__(self) -> None:
-        pass
+        self.direction: str = 'RIGHT'
+        self.change_to: str = self.direction
+        
+        # FPS (frames per second) controller
+        self.fps_controller = pygame.time.Clock()
+
+        self.snake_pos: List[int] = [POSITION_X, POSITION_Y]
+        self.snake_body: List[List[int]] = [
+            [POSITION_X, POSITION_Y],
+            [POSITION_X - HEIGHT_WIDTH, POSITION_Y],
+            [POSITION_X - (2 * HEIGHT_WIDTH), POSITION_Y],
+        ]
+
+        self.food_pos: List[int] = [
+            random.randrange(1, (FRAME_SIZE_X // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+            random.randrange(1, (FRAME_SIZE_Y // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+        ]
+        self.food_spawn: bool = True
+
+
+        self.score: int = 0
 
     def is_ended(self) -> bool:
         return False
 
     def update(self, clock : pygame.time.Clock) -> None:
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            # Whenever a key is pressed down
+            elif event.type == pygame.KEYDOWN:
+                # W -> Up; S -> Down; A -> Left; D -> Right
+                if event.key == pygame.K_UP or event.key == ord('w'):
+                    self.change_to = 'UP'
+                if event.key == pygame.K_DOWN or event.key == ord('s'):
+                    self.change_to = 'DOWN'
+                if event.key == pygame.K_LEFT or event.key == ord('a'):
+                    self.change_to = 'LEFT'
+                if event.key == pygame.K_RIGHT or event.key == ord('d'):
+                    self.change_to = 'RIGHT'
+                # Esc -> Create event to quit the game
+                if event.key == pygame.K_ESCAPE:
+                    pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+        # Making sure the snake cannot move in the opposite direction instantaneously
+        if self.change_to == 'UP' and self.direction != 'DOWN':
+            self.direction = 'UP'
+        if self.change_to == 'DOWN' and self.direction != 'UP':
+            self.direction = 'DOWN'
+        if self.change_to == 'LEFT' and self.direction != 'RIGHT':
+            self.direction = 'LEFT'
+        if self.change_to == 'RIGHT' and self.direction != 'LEFT':
+            self.direction = 'RIGHT'
+
+        # Moving the snake
+        if self.direction == 'UP':
+            self.snake_pos[1] -= HEIGHT_WIDTH
+        if self.direction == 'DOWN':
+            self.snake_pos[1] += HEIGHT_WIDTH
+        if self.direction == 'LEFT':
+            self.snake_pos[0] -= HEIGHT_WIDTH
+        if self.direction == 'RIGHT':
+            self.snake_pos[0] += HEIGHT_WIDTH
+
+        # Snake body growing mechanism
+        self.snake_body.insert(0, list(self.snake_pos))
+        if self.snake_pos[0] == self.food_pos[0] and self.snake_pos[1] == self.food_pos[1]:
+            self.score += 1
+            self.food_spawn = False
+        else:
+            self.snake_body.pop()
+
+        # Spawning food on the screen
+        if not self.food_spawn:
+            self.food_pos = [
+                random.randrange(1, (FRAME_SIZE_X // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+                random.randrange(1, (FRAME_SIZE_Y // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+            ]
+        self.food_spawn = True
+
+        # Game Over conditions
+        # Getting out of bounds
+        if self.snake_pos[0] < 0 or self.snake_pos[0] > FRAME_SIZE_X - HEIGHT_WIDTH:
+            game_over()
+        if self.snake_pos[1] < 0 or self.snake_pos[1] > FRAME_SIZE_Y - HEIGHT_WIDTH:
+            game_over()
+        # Touching the snake body
+        for block in self.snake_body[1:]:
+            if self.snake_pos[0] == block[0] and self.snake_pos[1] == block[1]:
+                game_over()
+
+        show_score(1, WHITE, 'consolas', HEIGHT_WIDTH * 2)
+        # Refresh game screen
+        pygame.display.update()
+        # Refresh rate
+        self.fps_controller.tick(difficulty)
 
     def render(self, surface : pygame.Surface) -> None:
         # GFX
         surface.fill(BLACK)
-        for pos in snake_body:
+        for pos in self.snake_body:
             # Snake body
             # .draw.rect(play_surface, color, xy-coordinate)
             # xy-coordinate -> .Rect(x, y, size_x, size_y)
@@ -126,84 +214,13 @@ class Game:
 
         # Snake food
         pygame.draw.rect(
-            game_window, WHITE, pygame.Rect(food_pos[0], food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+            game_window, WHITE, pygame.Rect(self.food_pos[0], self.food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
         )
 
 # Main logic
 game = Game()
 while not game.is_ended():
     game.update(pygame.time.Clock())
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        # Whenever a key is pressed down
-        elif event.type == pygame.KEYDOWN:
-            # W -> Up; S -> Down; A -> Left; D -> Right
-            if event.key == pygame.K_UP or event.key == ord('w'):
-                change_to = 'UP'
-            if event.key == pygame.K_DOWN or event.key == ord('s'):
-                change_to = 'DOWN'
-            if event.key == pygame.K_LEFT or event.key == ord('a'):
-                change_to = 'LEFT'
-            if event.key == pygame.K_RIGHT or event.key == ord('d'):
-                change_to = 'RIGHT'
-            # Esc -> Create event to quit the game
-            if event.key == pygame.K_ESCAPE:
-                pygame.event.post(pygame.event.Event(pygame.QUIT))
-
-    # Making sure the snake cannot move in the opposite direction instantaneously
-    if change_to == 'UP' and direction != 'DOWN':
-        direction = 'UP'
-    if change_to == 'DOWN' and direction != 'UP':
-        direction = 'DOWN'
-    if change_to == 'LEFT' and direction != 'RIGHT':
-        direction = 'LEFT'
-    if change_to == 'RIGHT' and direction != 'LEFT':
-        direction = 'RIGHT'
-
-    # Moving the snake
-    if direction == 'UP':
-        snake_pos[1] -= HEIGHT_WIDTH
-    if direction == 'DOWN':
-        snake_pos[1] += HEIGHT_WIDTH
-    if direction == 'LEFT':
-        snake_pos[0] -= HEIGHT_WIDTH
-    if direction == 'RIGHT':
-        snake_pos[0] += HEIGHT_WIDTH
-
-    # Snake body growing mechanism
-    snake_body.insert(0, list(snake_pos))
-    if snake_pos[0] == food_pos[0] and snake_pos[1] == food_pos[1]:
-        score += 1
-        food_spawn = False
-    else:
-        snake_body.pop()
-
-    # Spawning food on the screen
-    if not food_spawn:
-        food_pos = [
-            random.randrange(1, (FRAME_SIZE_X // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
-            random.randrange(1, (FRAME_SIZE_Y // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
-        ]
-    food_spawn = True
-
-    # Game Over conditions
-    # Getting out of bounds
-    if snake_pos[0] < 0 or snake_pos[0] > FRAME_SIZE_X - HEIGHT_WIDTH:
-        game_over()
-    if snake_pos[1] < 0 or snake_pos[1] > FRAME_SIZE_Y - HEIGHT_WIDTH:
-        game_over()
-    # Touching the snake body
-    for block in snake_body[1:]:
-        if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
-            game_over()
-
-    show_score(1, WHITE, 'consolas', HEIGHT_WIDTH * 2)
-    # Refresh game screen
-    pygame.display.update()
-    # Refresh rate
-    fps_controller.tick(difficulty)
 
     game.render(game_window)
     
