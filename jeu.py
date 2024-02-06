@@ -171,9 +171,10 @@ while True:
         )
 
     # Snake food
-    pygame.draw.rect(game_window, WHITE, 
-                    pygame.Rect(food_pos[0], 
-                    food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH))
+    pygame.draw.rect(
+        game_window, WHITE, pygame.Rect(food_pos[0], food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+    )
+
 
     # Game Over conditions
     # Getting out of bounds
