@@ -198,7 +198,7 @@ class Game:
         pass
 
     def is_ended(self: Game) -> bool:
-        pass
+        return False
 
     def update(self: Game, clock : Clock) -> None:
         pass
