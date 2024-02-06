@@ -2,8 +2,11 @@
 Snake Eater
 Made with PyGame
 """
-
-import pygame, sys, time, random
+import pygame
+import sys
+import time
+import random
+from typing import List, Tuple
 
 
 # Difficulty settings
@@ -51,9 +54,12 @@ HEIGHT_WIDTH: int = 10
 POSITION_X: int = HEIGHT_WIDTH * 10
 POSITION_Y: int = HEIGHT_WIDTH * 5
 
-snake_pos = [POSITION_X, POSITION_Y]
-snake_body = [[POSITION_X, POSITION_Y], [POSITION_X-HEIGHT_WIDTH, POSITION_Y], [POSITION_X-(2*HEIGHT_WIDTH), POSITION_Y]]
-
+snake_pos: List[int] = [POSITION_X, POSITION_Y]
+snake_body: List[List[int]] = [
+    [POSITION_X, POSITION_Y],
+    [POSITION_X - HEIGHT_WIDTH, POSITION_Y],
+    [POSITION_X - (2 * HEIGHT_WIDTH), POSITION_Y],
+]
 food_pos = [random.randrange(1, (FRAME_SIZE_X//HEIGHT_WIDTH)) * HEIGHT_WIDTH, 
             random.randrange(1, (FRAME_SIZE_Y//HEIGHT_WIDTH)) * HEIGHT_WIDTH]
 food_spawn = True
