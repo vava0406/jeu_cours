@@ -114,7 +114,20 @@ class Game:
         pass
 
     def render(self, surface : pygame.Surface) -> None:
-        pass
+        # GFX
+        surface.fill(BLACK)
+        for pos in snake_body:
+            # Snake body
+            # .draw.rect(play_surface, color, xy-coordinate)
+            # xy-coordinate -> .Rect(x, y, size_x, size_y)
+            pygame.draw.rect(
+                surface, GREEN, pygame.Rect(pos[0], pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+            )
+
+        # Snake food
+        pygame.draw.rect(
+            game_window, WHITE, pygame.Rect(food_pos[0], food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
+        )
 
 # Main logic
 game = Game()
@@ -193,17 +206,4 @@ while not game.is_ended():
     fps_controller.tick(difficulty)
 
     game.render(game_window)
-    # GFX
-    game_window.fill(BLACK)
-    for pos in snake_body:
-        # Snake body
-        # .draw.rect(play_surface, color, xy-coordinate)
-        # xy-coordinate -> .Rect(x, y, size_x, size_y)
-        pygame.draw.rect(
-            game_window, GREEN, pygame.Rect(pos[0], pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
-        )
-
-    # Snake food
-    pygame.draw.rect(
-        game_window, WHITE, pygame.Rect(food_pos[0], food_pos[1], HEIGHT_WIDTH, HEIGHT_WIDTH)
-    )
+    
