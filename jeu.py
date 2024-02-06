@@ -192,3 +192,16 @@ while True:
     pygame.display.update()
     # Refresh rate
     fps_controller.tick(difficulty)
+
+class Game:
+    def __init__(self) -> None:
+        pass
+
+    def is_ended(self: Game) -> bool:
+        pass
+
+    def update(self: Game, clock : Clock) -> None:
+        pass
+
+    def render(self: Game, surface : Surface) -> None:
+        pass
