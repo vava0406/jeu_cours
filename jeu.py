@@ -154,8 +154,10 @@ while True:
 
     # Spawning food on the screen
     if not food_spawn:
-        food_pos = [random.randrange(1, (FRAME_SIZE_X//HEIGHT_WIDTH)) * HEIGHT_WIDTH, 
-                    random.randrange(1, (FRAME_SIZE_Y//HEIGHT_WIDTH)) * HEIGHT_WIDTH]
+        food_pos = [
+            random.randrange(1, (FRAME_SIZE_X // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+            random.randrange(1, (FRAME_SIZE_Y // HEIGHT_WIDTH)) * HEIGHT_WIDTH,
+        ]
     food_spawn = True
 
     # GFX
